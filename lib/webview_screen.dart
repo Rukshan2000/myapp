@@ -23,9 +23,6 @@ class _WebViewScreenState extends State<WebViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My EV'),
-      ),
       body: WebViewWidget(controller: _controller),
     );
   }
