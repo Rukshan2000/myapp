@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 class WebViewScreen extends StatefulWidget {
   const WebViewScreen({super.key});
@@ -17,44 +16,20 @@ class _WebViewScreenState extends State<WebViewScreen> {
   void initState() {
     super.initState();
 
-    final WebViewController controller = WebViewController();
-
-    controller
+    // A simple and clean WebView controller initialization.
+    // No permission handling is needed here anymore, as it is handled
+    // at the app's startup in main.dart.
+    _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {
-            // Update loading bar.
-          },
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) {},
-          onWebResourceError: (WebResourceError error) {},
-        ),
-      )
-      ..addJavaScriptChannel(
-        'Toaster',
-        onMessageReceived: (JavaScriptMessage message) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message.message)),
-          );
-        },
-      )
       ..loadRequest(Uri.parse('https://my.ev.lk/'));
-
-    if (controller.platform is AndroidWebViewController) {
-      (controller.platform as AndroidWebViewController)
-          .setPermissionRequestHandler((request) {
-        request.grant();
-      });
-    }
-
-    _controller = controller;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WebViewWidget(controller: _controller),
+      body: SafeArea(
+        child: WebViewWidget(controller: _controller),
+      ),
     );
   }
 }
