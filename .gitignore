@@ -1,5 +1,6 @@
 # Miscellaneous
 *.class
+*.lock
 *.log
 *.pyc
 *.swp
@@ -9,17 +10,41 @@
 .history
 .svn/
 
-# IntelliJ
-*.iml
-*.ipr
-*.iws
-.idea/
+# Packages
+.packages
+.pub-cache/
 
 # Flutter
-.metadata
-.packages
+.dart_tool/
+.idea/
+.project
+.settings/
+build/
 .flutter-plugins
 .flutter-plugins-dependencies
-build/
-ios/
-  
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+
+# Android
+android/key.properties
+android/local.properties
+android/.gradle/
+android/app/build/
+
+# Web
+.dart_tool/build/
+
+# Executables
+*.exe
+*.dmg
+*.deb
+*.rpm
+
+# Firebase
+.firebase/
+firebase.json
+.firebaserc

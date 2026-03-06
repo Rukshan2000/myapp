@@ -1,8 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
-void main() {
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await requestPermissions();
   runApp(const MyApp());
+}
+
+Future<void> requestPermissions() async {
+  await [
+    Permission.camera,
+    Permission.location,
+    Permission.notification,
+  ].request();
 }
 
 class MyApp extends StatelessWidget {
@@ -11,37 +23,27 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'myev',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('WebView App'),
+        ),
+        body: InAppWebView(
+          initialUrlRequest: URLRequest(
+            url: WebUri("https://my-flutter-app-425816.web.app"),
+          ),
+          initialSettings: InAppWebViewSettings(
+            javaScriptEnabled: true,
+            mediaPlaybackRequiresUserGesture: false,
+            allowsInlineMediaPlayback: true,
+          ),
+          onPermissionRequest: (controller, request) async {
+            return PermissionResponse(
+              resources: request.resources,
+              action: PermissionResponseAction.GRANT,
+            );
+          },
+        ),
       ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  late final WebViewController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse('https://my.ev.lk'));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: WebViewWidget(controller: controller),
     );
   }
 }
