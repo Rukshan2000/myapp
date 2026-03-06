@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class WebViewScreen extends StatefulWidget {
   const WebViewScreen({super.key});
@@ -10,25 +10,26 @@ class WebViewScreen extends StatefulWidget {
 }
 
 class _WebViewScreenState extends State<WebViewScreen> {
-  late final WebViewController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // A simple and clean WebView controller initialization.
-    // No permission handling is needed here anymore, as it is handled
-    // at the app's startup in main.dart.
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse('https://my.ev.lk/'));
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: WebViewWidget(controller: _controller),
+        child: InAppWebView(
+          initialUrlRequest: URLRequest(
+            url: WebUri("https://my.ev.lk/"),
+          ),
+          initialSettings: InAppWebViewSettings(
+            javaScriptEnabled: true,
+            mediaPlaybackRequiresUserGesture: false,
+          ),
+          onPermissionRequest: (controller, request) async {
+            return PermissionResponse(
+              resources: request.resources,
+              action: PermissionResponseAction.GRANT,
+            );
+          },
+        ),
       ),
     );
   }
