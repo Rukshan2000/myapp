@@ -15,9 +15,39 @@ class _WebViewScreenState extends State<WebViewScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = WebViewController()
+
+    final WebViewController controller = WebViewController();
+
+    controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onWebResourceError: (WebResourceError error) {},
+        ),
+      )
+      ..addJavaScriptChannel(
+        'Toaster',
+        onMessageReceived: (JavaScriptMessage message) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message.message)),
+          );
+        },
+      )
       ..loadRequest(Uri.parse('https://my.ev.lk/'));
+
+    if (controller.platform is AndroidWebViewController) {
+      (controller.platform as AndroidWebViewController)
+          .setOnPermissionRequest((request) {
+        request.grant();
+      });
+    }
+
+    _controller = controller;
   }
 
   @override
