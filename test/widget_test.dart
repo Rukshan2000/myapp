@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'package:myapp/main.dart';
+import '../lib/main.dart';
 
 void main() {
   testWidgets('App starts and shows WebView', (WidgetTester tester) async {
@@ -21,6 +21,6 @@ void main() {
     expect(find.byType(MaterialApp), findsOneWidget);
 
     // Verify that the WebViewScreen is present.
-    expect(find.byType(WebViewScreen), findsOneWidget);
+    expect(find.byType(WebView), findsOneWidget);
   });
 }
