@@ -43,7 +43,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
     if (controller.platform is AndroidWebViewController) {
       (controller.platform as AndroidWebViewController)
-          .setOnPermissionRequest((request) {
+          .setPermissionRequestHandler((request) {
         request.grant();
       });
     }
